@@ -6,6 +6,7 @@ require('dotenv').config();
 
 const app = express();
 
+
 // Middlewares
 app.use(express.json());
 app.use(cors());
@@ -15,10 +16,7 @@ const notesRoutes = require('./routes/notes');
 app.use('/api/notes', notesRoutes);
 
 // MongoDB connection
-mongoose.connect(process.env.MONGO_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-}).then(() => {
+mongoose.connect(process.env.MONGO_URI).then(() => {
     console.log('MongoDB connected');
-    app.listen(5000, () => console.log('Server running on port 5000'));
+    app.listen(5001, () => console.log('Server running on port 5001'));
 }).catch(err => console.log(err));
