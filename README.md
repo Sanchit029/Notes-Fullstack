@@ -91,10 +91,10 @@ Notes-Fullstack/
 
 Here are some screenshots of the app:
 
-![Login Page](public/Home_Page.png)
+![Login Page](/frontend/public/Home_Page.png)
 *Login page of the Notes App*
 
-![Notes Dashboard](public/Create_Note.png)
+![Notes Dashboard](/frontend/public/Create_Note.png)
 *Dashboard showing user notes*
 
 ## License
