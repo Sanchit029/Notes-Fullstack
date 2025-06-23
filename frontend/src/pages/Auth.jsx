@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import axios from 'axios';
+const api = import.meta.env.VITE_API_URL;
+axios.defaults.baseURL = `${api}`;
 
 function Auth({ setToken }) {
   const [isLogin, setIsLogin] = useState(true);
@@ -8,8 +10,8 @@ function Auth({ setToken }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const url = isLogin
-      ? 'http://localhost:5001/api/auth/login'
-      : 'http://localhost:5001/api/auth/signup';
+      ? '/auth/login'
+      : '/auth/signup';
 
     try {
       const res = await axios.post(url, form);

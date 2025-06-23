@@ -2,6 +2,8 @@ import './index.css';
 import { useEffect, useState, useCallback } from 'react';
 import axios from 'axios';
 import Auth from './pages/Auth';
+const api = import.meta.env.VITE_API_URL;
+axios.defaults.baseURL = `${api}`;
 
 function App() {
   const [token, setToken] = useState(localStorage.getItem('token'));
@@ -11,7 +13,7 @@ function App() {
 
   const fetchNotes = useCallback(async () => {
     try {
-      const res = await axios.get('http://localhost:5001/api/notes', {
+      const res = await axios.get('/notes/', {
         headers: { Authorization: token },
       });
       setNotes(res.data);
@@ -25,13 +27,13 @@ function App() {
     try {
       if (editingId) {
         await axios.put(
-          `http://localhost:5001/api/notes/${editingId}`,
+          `/notes/${editingId}`,
           form,
           { headers: { Authorization: token } }
         );
         setEditingId(null);
       } else {
-        await axios.post('http://localhost:5001/api/notes', form, {
+        await axios.post('/notes/', form, {
           headers: { Authorization: token },
         });
       }
@@ -44,7 +46,7 @@ function App() {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:5001/api/notes/${id}`, {
+      await axios.delete(`/notes/${id}`, {
         headers: { Authorization: token },
       });
       fetchNotes();
