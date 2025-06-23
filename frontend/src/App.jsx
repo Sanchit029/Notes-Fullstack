@@ -1,45 +1,55 @@
-import "./index.css";
-import { useEffect, useState } from "react";
-import axios from "axios";
+import './index.css';
+import { useEffect, useState, useCallback } from 'react';
+import axios from 'axios';
+import Auth from './pages/Auth';
 
 function App() {
+  const [token, setToken] = useState(localStorage.getItem('token'));
   const [notes, setNotes] = useState([]);
-  const [form, setForm] = useState({ title: "", content: "" });
+  const [form, setForm] = useState({ title: '', content: '' });
   const [editingId, setEditingId] = useState(null);
 
-  const fetchNotes = async () => {
+  const fetchNotes = useCallback(async () => {
     try {
-      const res = await axios.get("http://localhost:5001/api/notes");
+      const res = await axios.get('http://localhost:5001/api/notes', {
+        headers: { Authorization: token },
+      });
       setNotes(res.data);
     } catch (err) {
-      console.error("Error fetching notes:", err);
+      console.error('Error fetching notes:', err);
     }
-  };
+  }, [token]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       if (editingId) {
-        // Update note
-        await axios.put(`http://localhost:5001/api/notes/${editingId}`, form);
+        await axios.put(
+          `http://localhost:5001/api/notes/${editingId}`,
+          form,
+          { headers: { Authorization: token } }
+        );
         setEditingId(null);
       } else {
-        // Create new note
-        await axios.post("http://localhost:5001/api/notes", form);
+        await axios.post('http://localhost:5001/api/notes', form, {
+          headers: { Authorization: token },
+        });
       }
-      setForm({ title: "", content: "" });
+      setForm({ title: '', content: '' });
       fetchNotes();
     } catch (err) {
-      console.error("Error saving note:", err);
+      console.error('Error saving note:', err);
     }
   };
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:5001/api/notes/${id}`);
+      await axios.delete(`http://localhost:5001/api/notes/${id}`, {
+        headers: { Authorization: token },
+      });
       fetchNotes();
     } catch (err) {
-      console.error("Error deleting note:", err);
+      console.error('Error deleting note:', err);
     }
   };
 
@@ -48,20 +58,35 @@ function App() {
     setEditingId(note._id);
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    setToken(null);
+  };
+
   useEffect(() => {
-    fetchNotes();
-  }, []);
+    if (token) fetchNotes();
+  }, [token,fetchNotes]);
+
+  if (!token) return <Auth setToken={setToken} />;
 
   return (
     <div className="p-8 bg-gray-100 min-h-screen flex flex-col items-center">
-      <h1 className="text-4xl font-bold mb-6">Notes App</h1>
+      <div className="flex justify-between w-full max-w-5xl mb-4">
+        <h1 className="text-4xl font-bold">Notes App</h1>
+        <button
+          onClick={handleLogout}
+          className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+        >
+          Logout
+        </button>
+      </div>
 
       <form
         onSubmit={handleSubmit}
         className="bg-white p-6 rounded-lg shadow-md mb-8 w-full max-w-lg"
       >
         <h2 className="text-2xl font-semibold mb-4">
-          {editingId ? "Edit Note" : "Create Note"}
+          {editingId ? 'Edit Note' : 'Create Note'}
         </h2>
         <input
           type="text"
@@ -82,7 +107,7 @@ function App() {
           type="submit"
           className="w-full bg-purple-500 text-white py-2 rounded hover:bg-purple-600"
         >
-          {editingId ? "Update Note" : "Add Note"}
+          {editingId ? 'Update Note' : 'Add Note'}
         </button>
       </form>
 
