@@ -77,7 +77,7 @@ function App() {
         <h1 className="text-4xl font-bold">Notes App</h1>
         <button
           onClick={handleLogout}
-          className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+          className="bg-red-500 text-black px-4 py-2 rounded hover:bg-red-600"
         >
           Logout
         </button>
@@ -107,7 +107,7 @@ function App() {
         ></textarea>
         <button
           type="submit"
-          className="w-full bg-purple-500 text-white py-2 rounded hover:bg-purple-600"
+          className="w-full bg-purple-500 text-black py-2 rounded hover:bg-purple-600"
         >
           {editingId ? 'Update Note' : 'Add Note'}
         </button>
@@ -130,13 +130,13 @@ function App() {
             <div className="flex justify-between">
               <button
                 onClick={() => handleEdit(note)}
-                className="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600"
+                className="bg-green-500 text-black px-3 py-1 rounded hover:bg-green-600"
               >
                 Edit
               </button>
               <button
                 onClick={() => handleDelete(note._id)}
-                className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
+                className="bg-red-500 text-black px-3 py-1 rounded hover:bg-red-600"
               >
                 Delete
               </button>

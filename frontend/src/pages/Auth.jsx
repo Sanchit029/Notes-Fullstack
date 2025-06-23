@@ -70,7 +70,7 @@ function Auth({ setToken }) {
 
         <button
           type="submit"
-          className="w-full bg-purple-500 text-white py-2 rounded hover:bg-purple-600"
+          className="w-full bg-purple-500 text-black py-2 rounded hover:bg-purple-600"
         >
           {isLogin ? 'Login' : 'Signup'}
         </button>
