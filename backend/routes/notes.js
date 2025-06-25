@@ -4,22 +4,28 @@ const router = express.Router();
 const Note = require('../models/Note');
 const auth = require('../middleware/auth');
 
-// Create a new note
-router.post('/',auth, async (req, res) => {
-    try {
-        const { title, content } = req.body;
-        const newNote = new Note({ title, content });
-        const savedNote = await newNote.save();
-        res.json(savedNote);
-    } catch (err) {
-        res.status(500).json({ message: err.message });
-    }
+// Create a new note (user-specific)
+router.post('/', auth, async (req, res) => {
+  try {
+    const { title, content } = req.body;
+
+    const newNote = new Note({
+      title,
+      content,
+      user: req.user,  // ✅ Link the note to the logged-in user
+    });
+
+    const savedNote = await newNote.save();
+    res.json(savedNote);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
 });
 
 // Get all notes
 router.get('/',auth, async (req, res) => {
     try {
-        const notes = await Note.find();
+        const notes = await Note.find({ user: req.user });
         res.json(notes);
     } catch (err) {
         res.status(500).json({ message: err.message });
